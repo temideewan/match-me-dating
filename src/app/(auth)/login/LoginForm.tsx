@@ -5,6 +5,10 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { loginSchema, LoginSchema } from '@/lib/schemas/LoginSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ActionResult } from '@/types';
+import { signInUser } from '@/app/actions/authActions';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 export default function LoginForm() {
   const {
@@ -13,9 +17,18 @@ export default function LoginForm() {
     formState: { isValid, errors },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
+    mode: 'onTouched',
   });
-  function onSubmit(data: LoginSchema) {
-    console.log(data);
+  const router = useRouter();
+  async function onSubmit(data: LoginSchema) {
+    let result: ActionResult<string>;
+    result = await signInUser(data);
+    if (result.status === 'success') {
+      router.push('/members');
+      router.refresh();
+    } else {
+      toast.error(result.error as string);
+    }
   }
   return (
     <Card className='w-2/5 mx-auto'>

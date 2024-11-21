@@ -5,18 +5,32 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { registerSchema, RegisterSchema } from '@/lib/schemas/RegisterSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { registerUser } from '@/app/actions/authActions';
 
 export default function RegisterForm() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { isValid, errors },
   } = useForm<RegisterSchema>({
-    resolver: zodResolver(registerSchema),
-    mode: 'onTouched'
+    // resolver: zodResolver(registerSchema),
+    mode: 'onTouched',
   });
-  function onSubmit(data: RegisterSchema) {
-    console.log(data);
+  async function onSubmit(data: RegisterSchema) {
+    const result = await registerUser(data);
+    if (result.status === 'success') {
+      console.log('User registered successfully');
+    } else {
+      if (Array.isArray(result.error)) {
+        result.error.forEach((e: any) => {
+          const fieldName = e.path.join('.') as 'email' | 'name' | 'password';
+          setError(fieldName, { message: e.message });
+        });
+      } else {
+        setError('root.serverError', { message: result.error });
+      }
+    }
   }
   return (
     <Card className='w-2/5 mx-auto'>
