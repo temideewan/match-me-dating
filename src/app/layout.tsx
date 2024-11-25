@@ -17,7 +17,11 @@ export default function RootLayout({
     <html lang='en'>
       <body>
         <TopNav />
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className="px-20">
+          {children}
+          </div>
+          </Providers>
       </body>
     </html>
   );

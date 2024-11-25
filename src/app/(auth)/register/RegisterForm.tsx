@@ -19,9 +19,7 @@ export default function RegisterForm() {
   });
   async function onSubmit(data: RegisterSchema) {
     const result = await registerUser(data);
-    if (result.status === 'success') {
-      console.log('User registered successfully');
-    } else {
+    if (result.status !== 'success') {
       if (Array.isArray(result.error)) {
         result.error.forEach((e: any) => {
           const fieldName = e.path.join('.') as 'email' | 'name' | 'password';
@@ -30,7 +28,9 @@ export default function RegisterForm() {
       } else {
         setError('root.serverError', { message: result.error });
       }
+      return;
     }
+    console.log('registered successfully')
   }
   return (
     <Card className='w-2/5 mx-auto'>

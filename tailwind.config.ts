@@ -10,5 +10,12 @@ const config: Config = {
   ],
   darkMode: "class",
   plugins: [nextui()],
+  theme:{
+    extend: {
+      backgroundImage: {
+        'dark-gradient': 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)'
+      }
+    }
+  }
 };
 export default config;

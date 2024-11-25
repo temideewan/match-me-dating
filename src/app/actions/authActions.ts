@@ -18,7 +18,6 @@ export async function signInUser(
       password: data.password,
       redirect: false,
     });
-    console.log(result);
     return { status: 'success', data: 'Logged in' };
   } catch (error) {
     if (error instanceof AuthError) {
@@ -29,7 +28,6 @@ export async function signInUser(
           return { status: 'error', error: 'An unexpected error occurred' };
       }
     } else {
-      console.log(error);
       return { status: 'error', error: 'An unexpected error occurred' };
     }
   }
