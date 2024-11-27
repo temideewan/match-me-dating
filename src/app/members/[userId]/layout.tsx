@@ -1,4 +1,4 @@
-import { getMemberById } from '@/app/actions/memberActions';
+import { getMemberByUserId } from '@/app/actions/memberActions';
 import { notFound } from 'next/navigation';
 import React, { ReactNode } from 'react';
 import MemberSidebar from '../MemberSidebar';
@@ -8,7 +8,7 @@ type Props = {
   params: { userId: string };
 };
 export default async function Layout({ children, params }: Props) {
-  const member = await getMemberById(params.userId);
+  const member = await getMemberByUserId(params.userId);
   if (!member) return notFound();
   return (
     <div className='grid grid-cols-12 gap-5 h-[80vh]'>
